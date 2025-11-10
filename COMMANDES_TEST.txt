@@ -1,0 +1,356 @@
+================================================================================
+          GUIDE RAPIDE - COMMANDES DE TEST ET D'UTILISATION
+================================================================================
+
+Ce fichier contient toutes les commandes nécessaires pour tester rapidement
+votre blockchain. Copiez-collez ces commandes dans votre terminal.
+
+================================================================================
+1. INSTALLATION
+================================================================================
+
+# Installer les dépendances
+pip install Flask requests
+
+# Ou via requirements.txt
+pip install -r requirements.txt
+
+================================================================================
+2. TESTS DE BASE (Sans API)
+================================================================================
+
+# Test 1: Exécuter blockchain.py directement
+python blockchain.py
+
+# Ce qui va se passer:
+# - Création d'une blockchain
+# - Ajout de transactions
+# - Minage de 2 blocs
+# - Affichage de la chaîne complète
+# - Validation de l'intégrité
+# - Affichage des soldes
+
+# Test 2: Démo interactive
+python test_demo.py
+
+# Menu interactif avec plusieurs démos:
+# 1. Démo complète
+# 2. Démo sécurité
+# 3. Démo difficulté
+# 4. Démo soldes
+# 5. Toutes les démos
+
+================================================================================
+3. DÉMARRAGE DE L'API REST
+================================================================================
+
+# Option 1: Port par défaut (5000)
+python app.py
+
+# Option 2: Port personnalisé
+python app.py --port 5001
+
+# Le serveur sera accessible sur: http://127.0.0.1:5000
+
+================================================================================
+4. TESTS DE L'API AVEC CURL
+================================================================================
+
+# 4.1. Consulter la documentation
+curl http://127.0.0.1:5000/
+
+# 4.2. Voir la blockchain complète
+curl http://127.0.0.1:5000/chain
+
+# 4.3. Ajouter une transaction
+curl -X POST http://127.0.0.1:5000/transactions/new \
+  -H "Content-Type: application/json" \
+  -d '{"sender":"Alice","recipient":"Bob","amount":50}'
+
+# 4.4. Ajouter plusieurs transactions
+curl -X POST http://127.0.0.1:5000/transactions/new \
+  -H "Content-Type: application/json" \
+  -d '{"sender":"Bob","recipient":"Charlie","amount":25}'
+
+curl -X POST http://127.0.0.1:5000/transactions/new \
+  -H "Content-Type: application/json" \
+  -d '{"sender":"Charlie","recipient":"David","amount":10}'
+
+# 4.5. Miner un bloc
+curl -X POST http://127.0.0.1:5000/mine \
+  -H "Content-Type: application/json" \
+  -d '{"miner":"Miner1"}'
+
+# Attendez que le minage se termine (environ 10-15 secondes)
+
+# 4.6. Voir la blockchain mise à jour
+curl http://127.0.0.1:5000/chain
+
+# 4.7. Vérifier la validité
+curl http://127.0.0.1:5000/validate
+
+# 4.8. Obtenir le solde d'Alice
+curl http://127.0.0.1:5000/balance/Alice
+
+# 4.9. Obtenir le solde du mineur
+curl http://127.0.0.1:5000/balance/Miner1
+
+================================================================================
+5. TESTS RÉSEAU MULTI-NŒUDS (PARTIE II)
+================================================================================
+
+# 5.1. Démarrer 3 nœuds dans 3 terminaux différents
+
+# TERMINAL 1 - Nœud 1 (Port 5000)
+python app.py --port 5000
+
+# TERMINAL 2 - Nœud 2 (Port 5001)
+python app.py --port 5001
+
+# TERMINAL 3 - Nœud 3 (Port 5002)
+python app.py --port 5002
+
+# 5.2. Dans un 4ème terminal, enregistrer les nœuds
+
+# Enregistrer le nœud 2 et 3 sur le nœud 1
+curl -X POST http://127.0.0.1:5000/nodes/register \
+  -H "Content-Type: application/json" \
+  -d '{"nodes":["http://127.0.0.1:5001","http://127.0.0.1:5002"]}'
+
+# Enregistrer le nœud 1 et 3 sur le nœud 2
+curl -X POST http://127.0.0.1:5001/nodes/register \
+  -H "Content-Type: application/json" \
+  -d '{"nodes":["http://127.0.0.1:5000","http://127.0.0.1:5002"]}'
+
+# Enregistrer le nœud 1 et 2 sur le nœud 3
+curl -X POST http://127.0.0.1:5002/nodes/register \
+  -H "Content-Type: application/json" \
+  -d '{"nodes":["http://127.0.0.1:5000","http://127.0.0.1:5001"]}'
+
+# 5.3. Vérifier les nœuds enregistrés
+curl http://127.0.0.1:5000/nodes/list
+curl http://127.0.0.1:5001/nodes/list
+curl http://127.0.0.1:5002/nodes/list
+
+# 5.4. Miner des blocs sur le nœud 1 uniquement
+curl -X POST http://127.0.0.1:5000/transactions/new \
+  -H "Content-Type: application/json" \
+  -d '{"sender":"Alice","recipient":"Bob","amount":100}'
+
+curl -X POST http://127.0.0.1:5000/mine \
+  -H "Content-Type: application/json" \
+  -d '{"miner":"Miner1"}'
+
+# Attendre que le minage se termine
+
+# 5.5. Vérifier les longueurs de chaîne
+curl http://127.0.0.1:5000/chain/length
+curl http://127.0.0.1:5001/chain/length
+curl http://127.0.0.1:5002/chain/length
+
+# Nœud 1 devrait avoir 2 blocs (genesis + 1)
+# Nœuds 2 et 3 devraient avoir 1 bloc (genesis uniquement)
+
+# 5.6. Synchroniser le nœud 2
+curl http://127.0.0.1:5001/nodes/resolve
+
+# Vérifier que le nœud 2 a maintenant 2 blocs
+curl http://127.0.0.1:5001/chain/length
+
+# 5.7. Synchroniser le nœud 3
+curl http://127.0.0.1:5002/nodes/resolve
+
+# Vérifier que le nœud 3 a maintenant 2 blocs
+curl http://127.0.0.1:5002/chain/length
+
+# 5.8. Tous les nœuds devraient maintenant avoir la même chaîne!
+
+================================================================================
+6. SCÉNARIO COMPLET DE DÉMONSTRATION
+================================================================================
+
+# 6.1. Démarrer le serveur
+python app.py
+
+# 6.2. Créer plusieurs transactions
+curl -X POST http://127.0.0.1:5000/transactions/new \
+  -H "Content-Type: application/json" \
+  -d '{"sender":"Alice","recipient":"Bob","amount":50}'
+
+curl -X POST http://127.0.0.1:5000/transactions/new \
+  -H "Content-Type: application/json" \
+  -d '{"sender":"Bob","recipient":"Charlie","amount":25}'
+
+curl -X POST http://127.0.0.1:5000/transactions/new \
+  -H "Content-Type: application/json" \
+  -d '{"sender":"Charlie","recipient":"David","amount":10}'
+
+# 6.3. Miner le premier bloc
+curl -X POST http://127.0.0.1:5000/mine \
+  -H "Content-Type: application/json" \
+  -d '{"miner":"Miner1"}'
+
+# 6.4. Ajouter d'autres transactions
+curl -X POST http://127.0.0.1:5000/transactions/new \
+  -H "Content-Type: application/json" \
+  -d '{"sender":"David","recipient":"Alice","amount":5}'
+
+curl -X POST http://127.0.0.1:5000/transactions/new \
+  -H "Content-Type: application/json" \
+  -d '{"sender":"Bob","recipient":"Alice","amount":20}'
+
+# 6.5. Miner le deuxième bloc
+curl -X POST http://127.0.0.1:5000/mine \
+  -H "Content-Type: application/json" \
+  -d '{"miner":"Miner2"}'
+
+# 6.6. Afficher la blockchain complète
+curl http://127.0.0.1:5000/chain
+
+# 6.7. Valider l'intégrité
+curl http://127.0.0.1:5000/validate
+
+# 6.8. Vérifier les soldes
+curl http://127.0.0.1:5000/balance/Alice
+curl http://127.0.0.1:5000/balance/Bob
+curl http://127.0.0.1:5000/balance/Charlie
+curl http://127.0.0.1:5000/balance/David
+curl http://127.0.0.1:5000/balance/Miner1
+curl http://127.0.0.1:5000/balance/Miner2
+
+================================================================================
+7. TESTS AVEC PYTHON (SCRIPT)
+================================================================================
+
+# Créer un fichier test_api.py avec ce contenu:
+
+import requests
+import time
+
+BASE_URL = "http://127.0.0.1:5000"
+
+print("🚀 Test de l'API Blockchain")
+print("="*80)
+
+# 1. Ajouter des transactions
+print("\n1. Ajout de transactions...")
+transactions = [
+    ("Alice", "Bob", 50),
+    ("Bob", "Charlie", 25),
+    ("Charlie", "David", 10)
+]
+
+for sender, recipient, amount in transactions:
+    response = requests.post(f"{BASE_URL}/transactions/new", json={
+        "sender": sender,
+        "recipient": recipient,
+        "amount": amount
+    })
+    if response.status_code == 201:
+        print(f"   ✅ {sender} → {recipient}: {amount} unités")
+
+# 2. Miner
+print("\n2. Minage du bloc...")
+response = requests.post(f"{BASE_URL}/mine", json={"miner": "TestMiner"})
+if response.status_code == 200:
+    data = response.json()
+    print(f"   ✅ Bloc miné!")
+    print(f"   Hash: {data['block']['hash']}")
+    print(f"   Nonce: {data['block']['nonce']}")
+
+# 3. Obtenir la chaîne
+print("\n3. Récupération de la blockchain...")
+response = requests.get(f"{BASE_URL}/chain")
+if response.status_code == 200:
+    data = response.json()
+    print(f"   ✅ Longueur: {data['length']} blocs")
+
+# 4. Validation
+print("\n4. Validation de la chaîne...")
+response = requests.get(f"{BASE_URL}/validate")
+if response.status_code == 200:
+    data = response.json()
+    print(f"   ✅ Valide: {data['valid']}")
+
+# 5. Soldes
+print("\n5. Soldes finaux:")
+for person in ["Alice", "Bob", "Charlie", "David", "TestMiner"]:
+    response = requests.get(f"{BASE_URL}/balance/{person}")
+    if response.status_code == 200:
+        balance = response.json()['balance']
+        print(f"   💰 {person:<15}: {balance:>8.2f} unités")
+
+print("\n" + "="*80)
+print("✅ Test terminé!")
+
+# Puis exécuter:
+# python test_api.py
+
+================================================================================
+8. CAPTURE DES RÉSULTATS
+================================================================================
+
+# Pour capturer les résultats dans un fichier:
+
+# Chaîne complète
+curl http://127.0.0.1:5000/chain > blockchain_result.json
+
+# Validation
+curl http://127.0.0.1:5000/validate > validation_result.json
+
+# Soldes
+curl http://127.0.0.1:5000/balance/Alice > balance_alice.json
+
+# Pour un affichage formaté (avec jq si installé):
+curl http://127.0.0.1:5000/chain | jq '.'
+
+================================================================================
+9. DÉPANNAGE
+================================================================================
+
+# Problème 1: Port déjà utilisé
+# Solution: Changer le port
+python app.py --port 5555
+
+# Problème 2: Module Flask non trouvé
+# Solution: Réinstaller Flask
+pip install --upgrade Flask
+
+# Problème 3: Connexion refusée entre nœuds
+# Solution: Vérifier que tous les nœuds sont démarrés
+# et utiliser 127.0.0.1 au lieu de localhost
+
+# Problème 4: Minage trop long
+# Solution: Réduire la difficulté dans blockchain.py
+# Changer: blockchain = Blockchain(difficulty=3)  # Au lieu de 4
+
+# Problème 5: Erreur JSON dans curl
+# Solution: Vérifier les guillemets et échapper si nécessaire
+# Sur Windows: utiliser des guillemets doubles et échapper les guillemets internes
+
+================================================================================
+10. COMMANDES UTILES
+================================================================================
+
+# Tuer un processus sur un port spécifique (si bloqué)
+# Linux/Mac:
+lsof -i :5000
+kill -9 [PID]
+
+# Windows:
+netstat -ano | findstr :5000
+taskkill /PID [PID] /F
+
+# Vérifier que le serveur répond
+curl -I http://127.0.0.1:5000/
+
+# Afficher les logs en temps réel
+# (Les logs s'affichent automatiquement dans le terminal du serveur)
+
+================================================================================
+FIN DU GUIDE
+================================================================================
+
+Bon courage pour les tests! 🚀
+
+Pour toute question, n'hésitez pas à consulter le README.md ou le rapport complet.
