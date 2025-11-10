@@ -417,57 +417,6 @@ Si un bloc est modifié, son hash change, cassant la chaîne.
 - Principe: la chaîne avec le plus de travail computationnel
 - Protège contre les attaques (un attaquant devrait contrôler >50% de la puissance de calcul)
 
----
-
-## 🎯 Bonnes Pratiques et Erreurs à Éviter
-
-### ✅ **Bonnes Pratiques**
-
-1. **Toujours valider la chaîne** après ajout de blocs
-2. **Utiliser des nonces aléatoires** au départ pour varier les recherches
-3. **Ajuster la difficulté** selon la puissance de calcul disponible
-4. **Implémenter des timeouts** pour les requêtes réseau
-5. **Logger les opérations** importantes (minage, ajout de blocs)
-
-### ❌ **Erreurs à Éviter**
-
-1. **Ne pas vérifier la validité** de la chaîne régulièrement
-2. **Miner sans transactions** (bloc vide)
-3. **Oublier la récompense du mineur**
-4. **Ne pas gérer les erreurs réseau** en mode décentralisé
-5. **Utiliser une difficulté trop élevée** (le minage peut prendre des heures)
-
----
-
-## 🚀 Améliorations Possibles
-
-### **1. Interface Web**
-- Créer une interface HTML/CSS/JavaScript
-- Visualiser la blockchain en temps réel
-- Formulaires pour ajouter des transactions
-
-### **2. Sécurité Renforcée**
-- Signatures numériques (clés publiques/privées)
-- Validation des transactions (solde suffisant)
-- Protection contre les double-dépenses
-
-### **3. Optimisations**
-- Pool de minage (mining pool)
-- Difficulté dynamique (ajustement automatique)
-- Merkle Trees pour les transactions
-- Base de données pour stocker la blockchain
-
-### **4. Fonctionnalités Avancées**
-- Smart contracts (contrats intelligents)
-- Tokens personnalisés
-- Mécanisme de vote pour les upgrades
-- Consensus alternatifs (Proof of Stake)
-
-### **5. Scalabilité**
-- Sharding (partitionnement de la blockchain)
-- Lightning Network (transactions off-chain)
-- Compression des blocs
-- Pruning (élagage des anciens blocs)
 
 ---
 
@@ -522,7 +471,7 @@ Si un bloc est modifié, son hash change, cassant la chaîne.
 
 ##  Auteur
 
-**Yassine**  
+**Yassine Chmirrou**  
 Étudiant en 5ème année - Big Data & Intelligence Artificielle  
 ENSA Tétouan - Université Abdelmalek Essaâdi  
 Année Universitaire: 2025-2026
