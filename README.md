@@ -4,7 +4,7 @@
 **Filière:** Big Data & Intelligence Artificielle  
 **Module:** M356 - Fondamentaux de la Blockchain  
 **Professeur:** Imad Sassi  
-**Auteur:** Yassine - BDIA 2025-2026
+**Auteur:** Yassine Chmirrou - BDIA 2025-2026
 
 ---
 
@@ -26,17 +26,17 @@
 Ce projet implémente une blockchain fonctionnelle en Python avec les fonctionnalités suivantes:
 
 ### **Partie I - Blockchain de Base**
-- ✅ Création de blocs avec signature numérique (hash SHA256)
-- ✅ Preuve de travail (PoW) avec difficulté ajustable
-- ✅ Système de récompense pour les mineurs
-- ✅ Validation de l'intégrité de la chaîne
-- ✅ API REST pour interagir avec la blockchain
+- Création de blocs avec signature numérique (hash SHA256)
+- Preuve de travail (PoW) avec difficulté ajustable
+- Système de récompense pour les mineurs
+- Validation de l'intégrité de la chaîne
+- API REST pour interagir avec la blockchain
 
 ### **Partie II - Décentralisation**
-- ✅ Gestion de nœuds multiples
-- ✅ Synchronisation entre nœuds
-- ✅ Algorithme de consensus (chaîne la plus longue)
-- ✅ Découverte automatique de nœuds
+- Gestion de nœuds multiples
+- Synchronisation entre nœuds
+- Algorithme de consensus (chaîne la plus longue)
+- Découverte automatique de nœuds
 
 ---
 
@@ -271,7 +271,7 @@ Cette route synchronise la blockchain avec le réseau en adoptant la chaîne la 
 
 ---
 
-## 🧪 Tests et Exemples
+##  Tests et Exemples
 
 ### **Exemple 1: Flux Complet**
 
@@ -362,7 +362,7 @@ print(response.json())
 
 ---
 
-## 🧠 Concepts Clés
+## Concepts Clés
 
 ### **1. Hachage Cryptographique (SHA256)**
 - Fonction à sens unique qui transforme des données en une empreinte unique
@@ -520,7 +520,7 @@ Si un bloc est modifié, son hash change, cassant la chaîne.
 
 ---
 
-## 👨‍💻 Auteur
+##  Auteur
 
 **Yassine**  
 Étudiant en 5ème année - Big Data & Intelligence Artificielle  
@@ -529,10 +529,3 @@ Année Universitaire: 2025-2026
 
 ---
 
-## 📄 Licence
-
-Ce projet est réalisé dans le cadre du module M356 - Fondamentaux de la Blockchain.
-
----
-
-**Note:** Ce projet est à but éducatif et ne doit pas être utilisé en production sans améliorations significatives en termes de sécurité, scalabilité et optimisation.

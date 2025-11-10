@@ -1,9 +1,4 @@
 """
-TP N°1 - Blockchain Fundamentals
-Université Abdelmalek Essaâdi - ENSA Tétouan
-Filière : Big Data & Intelligence Artificielle
-
-
 Ce fichier contient les classes Block et Blockchain qui constituent le cœur du système.
 """
 
